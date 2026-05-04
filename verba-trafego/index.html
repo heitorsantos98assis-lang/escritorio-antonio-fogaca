@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verba de Tráfego — Antônio Fogaça</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0f;
+    --surface: #141416;
+    --surface2: #1c1c1f;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0f0f0;
+    --text2: #888;
+    --text3: #555;
+    --blue: #4a9eff;
+    --blue-dim: rgba(74,158,255,0.12);
+    --green: #34d399;
+    --green-dim: rgba(52,211,153,0.1);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.1);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.1);
+    --pink: #f472b6;
+    --pink-dim: rgba(244,114,182,0.1);
+    --teal: #2dd4bf;
+    --teal-dim: rgba(45,212,191,0.1);
+    --accent: #4a9eff;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-logo {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--blue-dim);
+    border: 1px solid rgba(74,158,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--blue);
+  }
+  .topbar-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .topbar-sub { font-size: 12px; color: var(--text2); }
+  .topbar-badge {
+    font-size: 11px; padding: 3px 10px; border-radius: 20px;
+    background: var(--green-dim);
+    border: 1px solid rgba(52,211,153,0.2);
+    color: var(--green); font-weight: 500;
+  }
+  .container { max-width: 800px; margin: 0 auto; padding: 40px 24px 0; }
+  .page-header { margin-bottom: 32px; }
+  .page-header h1 {
+    font-size: 28px; font-weight: 700; color: var(--text);
+    letter-spacing: -0.03em; margin-bottom: 6px;
+  }
+  .page-header p { font-size: 14px; color: var(--text2); }
+  .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 36px; }
+  .scard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .scard-label { font-size: 11px; color: var(--text3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .scard-value { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+  .scard-value.accent { color: var(--blue); }
+  .scard-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+  .group { margin-bottom: 10px; }
+  .group-label {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px; margin-bottom: 2px;
+  }
+  .group-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .group-name { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); }
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .col-header {
+    display: grid;
+    grid-template-columns: 1fr 130px 130px;
+    gap: 8px;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .col-header span {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--text3);
+  }
+  .col-header span:nth-child(2),
+  .col-header span:nth-child(3) { text-align: right; }
+  .campaign-row {
+    display: grid;
+    grid-template-columns: 1fr 130px 130px;
+    gap: 8px;
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background 0.15s;
+  }
+  .campaign-row:last-child { border-bottom: none; }
+  .campaign-row:hover { background: rgba(255,255,255,0.02); }
+  .campaign-name { font-size: 13px; color: var(--text); font-weight: 400; }
+  .campaign-tag {
+    display: inline-block;
+    font-size: 10px; padding: 2px 7px; border-radius: 4px;
+    margin-left: 6px; font-weight: 500; vertical-align: middle;
+  }
+  .val-cell { text-align: right; }
+  .val-main { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-range { font-size: 13px; font-weight: 500; color: var(--blue); }
+  .total-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+  .total-row {
+    display: grid;
+    grid-template-columns: 1fr 130px 130px;
+    gap: 8px;
+    padding: 16px 18px;
+    align-items: center;
+    background: var(--surface2);
+  }
+  .total-label { font-size: 14px; font-weight: 700; color: var(--text); }
+  .total-val { text-align: right; font-size: 15px; font-weight: 700; color: var(--blue); }
+  .footer-note {
+    margin-top: 28px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--text3);
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .footer-note::before { content: '✦'; color: var(--text3); flex-shrink: 0; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text3); text-decoration: none;
+    margin-bottom: 28px;
+    transition: color 0.15s;
+  }
+  .back:hover { color: var(--text2); }
+  .back::before { content: '←'; }
+  @media (max-width: 600px) {
+    .summary { grid-template-columns: 1fr 1fr; }
+    .col-header, .campaign-row, .total-row { grid-template-columns: 1fr 90px 90px; }
+    .topbar { padding: 12px 16px; }
+    .container { padding: 28px 16px 0; }
+    .page-header h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">AF</div>
+    <div>
+      <div class="topbar-title">Escritório Antônio Fogaça</div>
+      <div class="topbar-sub">HL Mídias — Gestão de Tráfego</div>
+    </div>
+  </div>
+  <span class="topbar-badge">Ativo</span>
+</div>
+<div class="container">
+  <a href="../" class="back">Voltar ao início</a>
+  <div class="page-header">
+    <h1>Verba de Tráfego</h1>
+    <p>Distribuição diária e mensal por campanha · base 30 dias</p>
+  </div>
+  <div class="summary">
+    <div class="scard"><div class="scard-label">Diário mínimo</div><div class="scard-value">R$ 1.810</div><div class="scard-sub">8 campanhas</div></div>
+    <div class="scard"><div class="scard-label">Diário máximo</div><div class="scard-value accent">R$ 2.110</div><div class="scard-sub">8 campanhas</div></div>
+    <div class="scard"><div class="scard-label">Mensal mínimo</div><div class="scard-value">R$ 54.300</div><div class="scard-sub">× 30 dias</div></div>
+    <div class="scard"><div class="scard-label">Mensal máximo</div><div class="scard-value accent">R$ 63.300</div><div class="scard-sub">× 30 dias</div></div>
+  </div>
+  <div class="col-header" style="border-radius:10px 10px 0 0;border:1px solid var(--border);margin-bottom:-1px;">
+    <span>Campanha</span><span>Por dia</span><span>Por mês</span>
+  </div>
+  <div class="group">
+    <div class="group-label"><span class="group-dot" style="background:#4a9eff"></span><span class="group-name">Evento EDN</span></div>
+    <div class="table-wrap">
+      <div class="campaign-row">
+        <div class="campaign-name">EDN Captação Inside Sales <span class="campaign-tag" style="background:rgba(74,158,255,0.12);color:#4a9eff;">EDN</span></div>
+        <div class="val-cell"><div class="val-range">R$ 1.300 – 1.600</div></div>
+        <div class="val-cell"><div class="val-range">R$ 39.000 – 48.000</div></div>
+      </div>
+      <div class="campaign-row">
+        <div class="campaign-name">EDN Venda direto ingresso <span class="campaign-tag" style="background:rgba(74,158,255,0.12);color:#4a9eff;">EDN</span></div>
+        <div class="val-cell"><div class="val-main">R$ 100</div></div>
+        <div class="val-cell"><div class="val-main">R$ 3.000</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label"><span class="group-dot" style="background:#a78bfa"></span><span class="group-name">Mentoria AF</span></div>
+    <div class="table-wrap">
+      <div class="campaign-row">
+        <div class="campaign-name">Workshop Semanal A Mesa <span class="campaign-tag" style="background:rgba(167,139,250,0.12);color:#a78bfa;">Mentoria</span></div>
+        <div class="val-cell"><div class="val-main">R$ 100</div></div>
+        <div class="val-cell"><div class="val-main">R$ 3.000</div></div>
+      </div>
+      <div class="campaign-row">
+        <div class="campaign-name">Diagnóstico AF Inside Sales <span class="campaign-tag" style="background:rgba(167,139,250,0.12);color:#a78bfa;">Mentoria</span></div>
+        <div class="val-cell"><div class="val-main">R$ 50</div></div>
+        <div class="val-cell"><div class="val-main">R$ 1.500</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label"><span class="group-dot" style="background:#fbbf24"></span><span class="group-name">Evento GCR</span></div>
+    <div class="table-wrap">
+      <div class="campaign-row">
+        <div class="campaign-name">GCR Captação Inside Sales <span class="campaign-tag" style="background:rgba(251,191,36,0.12);color:#fbbf24;">GCR</span></div>
+        <div class="val-cell"><div class="val-main">R$ 150</div></div>
+        <div class="val-cell"><div class="val-main">R$ 4.500</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label"><span class="group-dot" style="background:#f472b6"></span><span class="group-name">Captação Seguidores AF</span></div>
+    <div class="table-wrap">
+      <div class="campaign-row">
+        <div class="campaign-name">Captação Seguidores AF <span class="campaign-tag" style="background:rgba(244,114,182,0.12);color:#f472b6;">Seguidores</span></div>
+        <div class="val-cell"><div class="val-main">R$ 60</div></div>
+        <div class="val-cell"><div class="val-main">R$ 1.800</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label"><span class="group-dot" style="background:#34d399"></span><span class="group-name">Atração de Vendedores</span></div>
+    <div class="table-wrap">
+      <div class="campaign-row">
+        <div class="campaign-name">Venda Curso Sales Academy <span class="campaign-tag" style="background:rgba(52,211,153,0.12);color:#34d399;">Curso</span></div>
+        <div class="val-cell"><div class="val-main">R$ 30</div></div>
+        <div class="val-cell"><div class="val-main">R$ 900</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label"><span class="group-dot" style="background:#6b7280"></span><span class="group-name">Evento Casal de Negócios</span></div>
+    <div class="table-wrap">
+      <div class="campaign-row">
+        <div class="campaign-name">Casal de Negócios Inside Sales <span class="campaign-tag" style="background:rgba(107,114,128,0.15);color:#9ca3af;">Evento</span></div>
+        <div class="val-cell"><div class="val-main">R$ 20</div></div>
+        <div class="val-cell"><div class="val-main">R$ 600</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="total-wrap">
+    <div class="total-row">
+      <div class="total-label">Total geral</div>
+      <div class="total-val">R$ 1.810 – 2.110</div>
+      <div class="total-val">R$ 54.300 – 63.300</div>
+    </div>
+  </div>
+  <div class="footer-note">Cálculo mensal baseado em 30 dias corridos. A verba do Evento EDN Captação Inside Sales possui faixa variável (R$ 1.300 – R$ 1.600/dia) conforme fase da campanha.</div>
+</div>
+</body>
+</html>
